@@ -1,0 +1,15 @@
+#
+# Some generic m68k tests
+#
+if [istarget m68*-*-*] then {
+    gas_test "t2.s" "" "" "cross-section branch"
+
+    gas_test "pic1.s" "" "" "PIC generation"
+
+    gas_test "disperr.s" "" "" "Incorrect Displacement too long error"
+
+    gas_test_error "p2410.s" "" "out-of-range 'bras'"
+}
+if [info exists errorInfo] then {
+    unset errorInfo
+    }

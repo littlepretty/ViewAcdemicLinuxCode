@@ -1,0 +1,11 @@
+# Special configuration to build nm for rs6000 lynx, but no other binutils.
+# In the unlikely case that you build an rs6000 lynx native _and_ use
+# --with, this file shall not be consulted and your warrenty shall be void.
+
+# If all the binutils are ever ported to rs6000 this file can be removed.
+
+MANPAGES= nm c++filt
+
+PROGS = $(NM_PROG) $(DEMANGLER_PROG)
+
+TOOL_PROGS = nm.new

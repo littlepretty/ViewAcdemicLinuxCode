@@ -1,0 +1,82 @@
+Thu Sep 29 12:36:51 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* VMS does not permits `.' in directory names.  Renamed
+	ld.bootstrap to ld-bootstrap, ld.cdtest to ld-cdtest, and
+	ld.scripts to ld-scripts.
+
+Wed Sep 28 12:18:54 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* config/default.exp: Set variables as and nm.  Create tmpdir if
+	it does not already exist.
+	* ld.bootstrap/bootstrap.exp: Don't create tmpdir here.
+	* ld.cdtest/cdtest.exp: Likewise.
+	* ld.scripts/defined.exp: Likewise.  Also, don't set as and nm
+	here.  Change perror for no variables found to fail.
+	* ld.scripts/script.exp: New test.
+	* ld.scripts/script.t, ld.scripts/script.s: New files.
+
+Tue Sep 27 14:59:51 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* ld.scripts: New directory.
+	* ld.scripts/defined.exp, ld.scripts/defined.s: New files.
+	* ld.scripts/defined.t: New file.
+	* lib/ld.exp (default_ld_simple_link): New function.
+	(default_ld_assemble, default_ld_nm): New functions.
+	* config/default.exp: Rename from unix-ld.exp.
+	(ld_simple_link, ld_assemble, ld_nm): New functions.
+
+	* config/unix-ld.exp: Set ld using findfile.
+	* lib/ld.exp (default_ld_relocate): Return a value.  Change format
+	of log messages.
+	(default_ld_compile): Likewise.
+	(default_ld_link): Likewise.  Also, don't include $BFDLIB and
+	$LIBIBERTY in link.
+	* ld.bootstrap/bootstrap.exp: Rewrite.
+	* ld.cdtest/cdtest.exp: Rewrite.
+	* ld.cdtest/cdtest-foo.cc: Update from top level ld directory.
+	* ld.cdtest/cdtest-foo.h: Likewise.
+	* ld.cdtest/cdtest-main.cc: Likewise.
+
+Fri May 27 09:35:04 1994  Ken Raeburn  (raeburn@cygnus.com)
+
+	* ld.cdtest/cdtest.exp: Don't look for $result before it's
+	defined.
+
+Tue May 17 15:06:49 1994  Bill Cox  (bill@rtl.cygnus.com)
+
+	* ld.bootstrap/bootstrap.exp, lib/ld.exp: Replace error proc
+	  calls with perror calls.
+
+Wed May 11 16:47:46 1994  Ken Raeburn  (raeburn@rtl.cygnus.com)
+
+	* ld.cdtest/cdtest-bar.cc: Renamed from cdtest-func.cc.
+	* ld.cdtest/cdtest.exp: Adjusted.
+
+Fri Jan 28 13:25:41 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	* lib/ld.exp (simple_diff): Indicate failure if files have
+	different numbers of lines.  Don't muck with $differences to avoid
+	indicating a pass, just return.
+
+	* testsuite/ld.cdtest/{cdtest-foo.h,cdtest-foo.cc,cdtest-main.cc}:
+	Fix test case to be valid ANSI C++.  Don't require use of header
+	files, so "../gcc/xgcc -B../gcc/" can be used for CXX.
+	* testsuite/ld.cdtest/cdtest.exp: Combine "rm" lines.  Add some
+	commentary on things that are still broken with this test case.
+
+Fri Sep 10 09:58:23 1993  Jeffrey Wheat  (cassidy@cygnus.com)
+
+	* testsuite/ld.cdtest/cdtest.exp: Added CXXFLAGS to compile stage.
+
+Thu Aug 12 16:05:37 1993  Jeffrey Wheat  (cassidy@cygnus.com)
+
+	* testsuite/lib/ld.exp: add compiler and linker support
+	* testsuite/config/unix-ld.exp: add compiler and linker support
+	* testsuite/ld.bootstrap/bootstrap.exp: fixed to do partial links
+	* testsuite/ld.cdtest/cdtest.exp: constructor/destructor testscase
+
+Wed Aug  4 21:00:18 1993  Jeffrey Wheat  (cassidy@cygnus.com)
+
+	* testsuite/lib/ld.exp: new file
+	* testsuite/config/unix-ld.exp: new file
+	* testsuite/ld.bootstrap/bootstrap.exp: new file

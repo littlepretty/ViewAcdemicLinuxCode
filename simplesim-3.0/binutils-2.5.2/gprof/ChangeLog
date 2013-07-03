@@ -1,0 +1,264 @@
+Fri Oct 21 18:58:02 1994  Ken Raeburn  <raeburn@cujo.cygnus.com>
+
+	* printgprof.c (flatprofheader): Always set totime to 1.0 if not
+	greater than 0.0.  Suggested by Harold Assink
+	<carlo@sg.tn.tudelft.nl>.
+
+Fri Sep 23 15:06:45 1994  Ken Raeburn  <raeburn@cujo.cygnus.com>
+
+	* printgprof.c (printprof): Use free, not cfree.
+	(printgprof, printindex): Ditto.
+
+Thu Sep  1 10:40:45 1994  Jeff Law  (law@snake.cs.utah.edu)
+
+	* gprof.h (kfromlist, ktolist, flist, Flist, elist, Elist): Make
+	decls extern to keep native HP compiler quiet.
+
+Tue Aug 30 11:12:13 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* gprof.c (funcsymbol): Ignore ___gnu_compiled as well as
+	__gnu_compiled, for the benefit of systems which add a leading
+	underscore.
+
+Wed Aug 24 12:49:13 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* configure.in: Change i386-*-* to i[345]86-*-*.
+
+Sun Jul 10 00:35:31 1994  Ian Dall  (dall@hfrd.dsto.gov.au)
+
+	* ns532.c, ns532.h: New Files. ns532 support.
+
+	* config/mt-ns532: New File. ns532 support.
+
+	* gprof.c: user register int i instead of defaulting the int.
+	Allows compilation with -Dregister= for debugging.
+
+	* configure.in: Add ns532 support.
+
+Thu Jun 23 11:22:41 1994  Jeff Law  (law@snake.cs.utah.edu)
+
+	* Makefile.in (gprof): Depend on $(LIBS).
+
+Fri May 27 12:24:57 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	From binutils-2.4 release:
+
+	Wed May 11 22:32:00 1994  DJ Delorie (dj@ctron.com)
+
+	* configure.bat: [new] build makefile from makefile.in (dos)
+	* hertz.c: allow static HERTZ (msdos needs it)
+	* gprof.c: allow target to select "r" or "rb" for fopen
+	* gprof.c: ignore __gnu_compiled symbols
+	* i386.h: dfine FOPEN_RB to "rb" for dos.
+
+Tue May 17 15:30:22 1994  E. Michael Smith (ems@cygnus.com)
+
+	* Makefile.in (.m.c:):  Added .SUFFIXES : .m 
+	so flat_bl.c would make from flat_bl.m file.
+
+Thu May  5 19:23:24 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	* Makefile.in (install-info): Check for gprof.info in build dir,
+	fall back to srcdir.  Depend on it.
+
+	* gprof.h (TRUE, FALSE): Always use undef before defining them.
+
+Mon Apr  4 23:47:30 1994  Jeffrey A. Law  (law@snake.cs.utah.edu)
+
+        * Makefile.in (MY_MACHINE): Renamed from MACHINE to avoid losing
+        makes (osf1) in which the value of MACHINE can not be changed.
+        * config/*.mt: Changed appropriately.
+
+Wed Mar 30 16:12:40 1994  Ian Lance Taylor  (ian@tweedledumb.cygnus.com)
+
+	* gprof.c (getsymtab): Change nosyms to long.  Rename
+	get_symtab_upper_bound to bfd_get_symtab_upper_bound.  Check for
+	errors from bfd_get_symtab_upper_bound and
+	bfd_canonicalize_symtab.
+
+Tue Mar 22 10:50:52 1994  Jeffrey A. Law  (law@snake.cs.utah.edu)
+
+	* gprof.c (funcsymbol): Use bfd_get_symbol_info instead of
+	bfd_decode_symclass.
+
+Sun Mar 20 15:40:21 1994  Jeffrey A. Law  (law@snake.cs.utah.edu)
+
+	* Makefile.in: Avoid bug in hpux sed.
+
+Wed Dec 15 20:16:40 1993  david d `zoo' zuhn  (zoo@andros.cygnus.com)
+
+	* gprof.texi (Invoking): add text about -v flag
+
+	* gprof.1: add text about -v flag
+
+Wed Dec  8 16:55:06 1993  david d `zoo' zuhn  (zoo@andros.cygnus.com)
+
+	* gprof.c (VERSION): defined a version macro, print the value 
+	when the -v option is used
+
+Tue Jul  6 10:11:56 1993  Steve Chamberlain  (sac@phydeaux.cygnus.com)
+
+	* Makefile.in: Install correctly.
+
+Thu Jun 24 14:43:22 1993  David J. Mackenzie  (djm@thepub.cygnus.com)
+
+	* gprof.c (main): Get whoami from argv, instead of hardcoding.
+	Use it in usage message.  Split usage message to fit in 80 cols.
+
+Sun Jun 20 20:58:02 1993  Ken Raeburn  (raeburn@poseidon.cygnus.com)
+
+	* Makefile.in: Undo 15 June change.
+
+Wed Jun 16 12:54:53 1993  Steve Chamberlain  (sac@phydeaux.cygnus.com)
+    
+	* gmon.h, gprof.h: structs of chars used to hold external
+	representations.
+	* gprof.c (getpfile, openpfile, readsamples): Swap data in using
+	new structures.
+
+Tue Jun 15 23:09:17 1993  Ken Raeburn  (raeburn@cambridge.cygnus.com)
+
+	* Makefile.in (.c.o): Look in ../include, not ../bfd, for bfd.h.
+
+Mon Jun 14 16:22:59 1993  david d `zoo' zuhn  (zoo at rtl.cygnus.com)
+
+	* Makefile.in: remove parentdir support
+
+Mon Jun  7 12:56:17 1993  Per Bothner  (bothner@rtl.cygnus.com)
+
+	* Makefile.in (INCLUDES):  Add -I../bfd for sysdep.h and bfd.h.
+	* configure.in:  No longer need to configure to get sysdep.h.
+
+Tue May 18 21:44:11 1993  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* Makefile.in (install): should not depend on install-info
+
+Mon Apr 26 12:37:46 1993  Ian Lance Taylor  (ian@cygnus.com)
+
+	* gprof.h: Include ansidecl.h before sysdep.h.  Undefine hz.
+
+Tue Apr 13 16:14:03 1993  Per Bothner  (bothner@cygnus.com)
+
+	* M Makefile.in:  Add -g to CFLAGS.
+	Ads LDFLAGS and use in place of CFLAGS where appropriate.
+	* configure.in:  Make a sysdep.hlink in the same way other
+	bfd-based directories do.
+	* gprof.h (UNIT):  Replace non-standard 'u_short' by 'unsigned
+	short'.
+	* gprof.h:  #include sysdep.h instead of a bunch of stuff.
+	* gprof.c (main):  Fix typo gproff->gprof.
+
+Thu Mar 25 19:00:37 1993  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* gprof.texi: add INFO-DIR-ENTRY
+
+Tue Mar 23 00:03:11 1993  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* Makefile.in: add installcheck target
+
+Sat Feb 27 18:17:10 1993  Per Bothner  (bothner@rtl.cygnus.com)
+
+	* gprof.c (funcsymbol):  Invert test for aflag.
+
+Thu Feb 25 16:01:50 1993  Per Bothner  (bothner@rtl.cygnus.com)
+
+	* printgprof (xmalloc, xrealloc):  Cast results of malloc
+	and realloc to PTR.
+
+Wed Feb  3 13:55:33 1993  Jeffrey Osier  (jeffrey@fowanton.cygnus.com)
+
+	* Makefile.in: created info, install-info, dvi
+
+Wed Jan  6 00:58:09 1993  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* Makefile.in: fix install rule for $(PROG)
+
+Fri Oct  9 11:25:41 1992  Mark Eichin  (eichin@cygnus.com)
+
+        * gprof.1: updated SYNOPSIS to match actual behavior.
+
+Mon Oct  5 17:50:16 1992  Per Bothner  (bothner@cygnus.com)
+
+	* gen-c-prog.awk:  New awk script, lightly changed from
+	previously deleted make-c-prog.awk.  Converts a text file
+	to a c function that prints that text.
+	* flat_bl.m, fsf_callg_bl.m, bsd_callg_bl.m:  New files.
+	Inputs to gen-c-prog.awk, containing text describing
+	gprof output.
+	* blurbs.c:  Removed.  Use *_bl.c instead.
+	* Makefile.in: Use gen-cprog.awk to generate *_bl.c files
+	from *_bl.m files.  Also, improve *clean rules.
+	* printgprof.c (printgprof):  Usw new function names from *_bl.c.
+	
+
+Sun Aug 30 19:54:53 1992  Per Bothner  (bothner@rtl.cygnus.com)
+
+	* gprof.h, gprof.c, printfgprof.c:  Add support for two
+	output styles:  The default is similar to the old FSF gprof,
+	while -T sets the variable bsd_style_output, which causes
+	output matching Berkeley's gprof.  The biggest differences
+	are that with the FSF style output, the flat profile comes
+	before the call graph; numbers come before explanations;
+	and there is less gratuitous white space.
+	* gprof.h, gprof.c, printfgprof.c:  New discard_underscores
+	variable causes discarding of initial underscores when
+	printing symbol names.  It is set unless there is a "main"
+	symbol (without an underscore).
+	* printfgprof.c:  New function printnameonly(), called
+	by printname().  It handles stripping of initial '_',
+	as well as C++ name-demangling.
+	* gprof.callg, gprof.flat, make-c-prog.awk:  Removed.
+	It is just as convenient to edit blurbs.c directly.
+	* Makefile.in:  Removed rule for making blurbs.c.
+	* blurbs.c:  This is now a true source file (as opposed
+	to being generated from gprof.callg and gprof.flat).
+	Change style to use one long string literal, instead of
+	one literal per output line.  Add FSF-style blurb for call graph.
+
+Wed Aug 19 14:36:39 1992  Ian Lance Taylor  (ian@cygnus.com)
+
+	* Makefile.in: always create installation directories.
+
+Wed Aug 12 15:14:14 1992  Mark Eichin  (eichin@cygnus.com)
+
+	* Makefile.in: change ${MACHINE} to $(MACHINE).
+
+Sun Jul 19 17:34:01 1992  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* Makefile.in:  removed installation of the now useless
+	call.{flag,callg} files.  
+
+	* gprof.1: now uses the standard man macros instead of the new BSD
+	mandoc macros. 
+
+Sun Jul 12 19:06:00 1992  John Gilmore  (gnu at cygnus.com)
+
+	* configure.in:  Remove host section, expand target section.
+	* config/mt-{tahoe,vax}:  Add, to match existing support files.
+	* config/tmake-*:  Remove leftover crud.
+
+	* blurbs.c:  New file, created from gprof.flat and gprof.callg by
+	* make-c-prog.awk:  which processes text files into C programs.
+	* printgprof.c (flatprofheader, gprofheader):  Call new functions
+	to print blurbs.
+	(printblurb):  Remove.
+	* Makefile.in:  Infrastructure to build blurbs.
+	* pathnames.h:  has been removed.  Gprof now has no filename
+	dependencies in it.
+	* gprof.c:  Lint.
+
+Sat Jul 11 18:07:21 1992  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* Makefile.in: define man1dir and install the man page
+
+Fri Jul 10 21:14:08 1992  david d `zoo' zuhn (zoo@cygnus.com)
+
+	* Makefile.in: added dummy info and install-info targets
+
+Thu Jun  4 11:34:02 1992  Mark Eichin  (eichin at cygnus.com)
+
+	* lookup.c: fixed fencepost in nllookup and added dbg_nllookup for
+	help in debugging the problem (with -DDEBUG)
+	* gprof.c: symbol values are now real values, don't add the vma
+	anymore. (done for solaris; should verify this on other platforms)
+	* ChangeLog: created.

@@ -1,0 +1,133 @@
+Thu Sep 29 12:45:39 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* VMS does not permits `.' in directory names.  Renamed
+	binutils.all to binutils-all.
+	* configure.in (configdirs): Change binutils.all to binutils-all.
+
+Fri Sep 23 16:01:14 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* configure.in: Use mt-m68k for m68k*-*-aout* and m68k*-*-coff*,
+	not for m68k-*-*.
+
+Fri Sep 23 13:54:50 1994  Ken Raeburn  <raeburn@cujo.cygnus.com>
+
+	* binutils.all/objdump.exp: Added ARM to list of CPU types.
+
+Thu Sep 22 11:04:50 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* binutils.all/objdump.exp: Update for new usage message.
+	* binutils.all/size.exp: Use a double backslash in the string to
+	get a single backslash to the regexp matcher.  Accept $TEXT$,
+	$DATA$ and $BSS$ as well as .text, .data and .bss, for HP/UX.
+
+Fri Sep  2 12:53:10 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* config/unix.exp: If nm.new does not exist, use [transform nm].
+	* config/default.exp: Likewise.
+
+Wed Aug 24 12:41:37 1994  Ian Lance Taylor  (ian@sanguine.cygnus.com)
+
+	* configure.in, binutils.all/configure.in: Change i386 to
+	i[345]86.
+
+Tue Jul 19 15:23:53 1994  Bill Cox  (bill@rtl.cygnus.com)
+
+	* config/mt-mips-ecoff: Add -Tidp.ld option.
+
+Thu Jun 30 12:41:55 1994  J.T. Conklin  (jtc@phishhead.cygnus.com)
+
+	* config/default.exp: Use nm.new, not nm, from newly built tree.
+
+Tue May 17 14:04:05 1994  Bill Cox  (bill@rtl.cygnus.com)
+
+	* config/default.exp, config/unix.exp: Replace error
+	  proc calls with perror.
+
+Tue May 10 11:20:54 1994  Stan Shebs  (shebs@andros.cygnus.com)
+
+	* configure.in (sparclite): Match on sparclite*-*-*.
+
+Wed Apr 13 18:25:19 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	* config/unix.exp: Use nm.new, not nm, from newly built tree.
+
+	* binutils.all/objdump.exp: Add more wildcards to list of
+	single-letter options in pattern for usage message.
+
+	* binutils.all/nm.exp: Deleted debug-symbols test, since it only
+	works for a.out/stabs systems.  Fixed regexps to make underscores
+	optional, since some C compilers don't prepend them.  Deleted
+	check for foo.o symbol, since again some systems don't generate
+	it.
+
+Mon Apr 11 10:31:00 1994  Bill Cox  (bill@rtl.cygnus.com)
+
+	* Makefile.in (check): Set TCL_LIBRARY for runtest.
+
+Mon Feb 14 19:34:03 1994  Rob Savoye  (rob@darkstar.cygnus.com)
+
+	* Makefile.in: Use new config features of DejaGnu in site.exp
+	file. "Make check" should now work for all crosses.
+
+Fri Jan 28 18:00:29 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	* binutils.all/objdump.exp: In usage message, accept
+	"section-name" as well as "section_name".
+
+Mon Jan 17 16:57:02 1994  Ken Raeburn  (raeburn@cujo.cygnus.com)
+
+	* binutils.all/objdump.exp: Trim list of format names expected,
+	and accept any known CPU type.
+
+Thu Dec  2 20:50:24 1993  Rob Savoye  (rob@darkstar.cygnus.com)
+
+	* Makefile.in: Remove some stuff from the site.exp file.
+	* config/unix.exp: Add global before seeing if the variables for
+	nm, objdump, and size exist.
+
+Wed Nov  3 11:12:32 1993  Rob Savoye  (rob@darkstar.cygnus.com)
+
+	* config/udi.exp,unix.exp: Transform tool name.
+	* binutils.all/*.exp: Clear errorInfo after exec.
+
+Fri Jul  2 12:41:20 1993  Ian Lance Taylor  (ian@cygnus.com)
+
+	* binutils.all/*.exp: Use -- for long arguments rather than +.
+
+Fri Jun  4 10:52:29 1993  david d `zoo' zuhn  (zoo at cirdan.cygnus.com)
+
+	* configure.in: change srctrigger to Makefile.in 
+
+Wed May 26 17:27:46 1993  Ian Lance Taylor  (ian@cygnus.com)
+
+	* Makefile.in (FLAGS_TO_PASS): Pass down CC and CFLAGS.
+
+Fri May  7 13:58:44 1993  Ian Lance Taylor  (ian@cygnus.com)
+
+	* binutils.all/objdump.exp: Update for new usage message.
+
+Mon Apr 19 14:08:52 1993  Rob Savoye  (rob@darkstar.cygnus.com)
+
+	* binutils.all/*.exp: Use the new util_test proc.
+	* Makefile.in: Create a local site.exp file with config info.
+
+Thu Mar 25 05:38:47 1993  Ken Raeburn  (raeburn@kr-pc.cygnus.com)
+
+	* nm.all/configure.in (srcname): Delete extra quote.
+
+Mon Feb 22 07:54:03 1993  Mike Werner  (mtw@poseidon.cygnus.com)
+
+        * binutils/testsuite: made modifications to testcases, etc., to allow
+        them to work properly  given the reorganization of deja-gnu and the
+        relocation of the testcases from deja-gnu to a "tool" subdirectory.
+
+Sun Feb 21 10:55:55 1993  Mike Werner  (mtw@poseidon.cygnus.com)
+
+	* binutils/testsuite: Initial creation of binutils/testsuite.
+	Migrated dejagnu testcases and support files for testing nm to
+	binutils/testsuite from deja-gnu.  These files were moved "as is"
+	with no modifications.  This migration is part of a major overhaul
+	of dejagnu.  The modifications to these testcases, etc., which
+	will allow them to work with the new version of dejagnu will be
+	made in a future update.
+

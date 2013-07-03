@@ -1,0 +1,180 @@
+# This file is a shell script fragment that supplies the information
+# necessary to tailor a template configure script into the configure
+# script appropriate for this directory.  For more information, check
+# any existing configure script.
+
+srctrigger=ldmain.c
+srcname="linker"
+target_dependent=true
+
+# per-host:
+
+. ${srcdir}/../bfd/configure.host
+
+host_makefile_frag=
+
+if [ -f ${srcdir}/config/${my_host}.mh ] ; then
+	host_makefile_frag=config/${my_host}.mh
+fi
+
+# per-target:
+
+# Canonicalize the secondary target names.
+if [ -n "$enable_targets" ]; then
+    for targ in `echo $enable_targets | sed 's/,/ /g'`
+    do
+	result=`$configsub $targ 2>/dev/null`
+	if [ -n "$result" ]; then
+	    canon_targets="$canon_targets $result"
+	else
+	    # Allow targets that config.sub doesn't recognize, like "all".
+	    canon_targets="$canon_targets $targ"
+	fi
+    done
+fi
+
+all_targets=false
+
+for targ in $target $canon_targets
+do
+
+case "${targ}" in
+
+  sparc-sun-sunos4*) 	ld_target=sun4 ;;
+  sparclite*-*-coff)	ld_target=coff-sparc ;;
+  sparclite*-fujitsu-*) ld_target=sun4 ;;
+  sparc*-*-aout)	ld_target=sun4 ;;
+  sparc*-*-coff)	ld_target=coff-sparc ;;
+  sparc64-*-elf*)	ld_target=sparc64-elf ;;
+  sparc64*)		ld_target=sun4 ;;
+  sparc*-*-elf)		ld_target=sun4sol2 ;;
+  sparc*-*-lynxos*)	ld_target=sparc-lynx ;;
+  sparc*-*-solaris2*)	ld_target=sun4sol2 ;;
+  sparc*-wrs-vxworks*)  ld_target=sun4 ;;
+  sparc*-*-netware)	ld_target=sun4sol2 ;;
+  i960-wrs-vxworks5.0*) ld_target=i960 ;;
+  i960-wrs-vxworks5*)   ld_target=i960coff ;;
+  i960-wrs-vxworks*)    ld_target=i960 ;;
+  i960-*-coff)		ld_target=i960coff ;;
+  i960-intel-nindy)	ld_target=i960 ;;
+  m68*-sun-sunos[34]*)	ld_target=sun3 ;;
+  m68*-wrs-vxworks*)    ld_target=vxworks68 ;;
+  m68*-ericsson-ose)	ld_target=ose68 ;;
+  *-tandem-none)	ld_target=st2000 ;; # FIXME needs better name
+  i[345]86-*-vsta)	ld_target=vsta ;;
+  i[345]86-*-go32)	ld_target=i386-go32 ;;
+  i[345]86-*-aix*)	ld_target=i386-coff ;;
+  i[345]86-*-sco*)	ld_target=i386-coff ;;
+  i[345]86-*-lynxos*)	ld_target=i386-lynx ;;
+  i[345]86-*-coff)	ld_target=i386-coff ;;
+  i[345]86-*-bsd)	ld_target=i386-bsd ;;
+  i[345]86-*-bsd386)	ld_target=i386-bsd ;;
+  i[345]86-*-bsdi*)	ld_target=i386-bsd ;;
+  i[345]86-*-aout)	ld_target=i386-aout ;;
+  i[345]86-*-linux*)	ld_target=i386-linux ;;
+  i[345]86-*-sysv4*)	ld_target=i386-elf ;;
+  i[345]86-*-unixware)	ld_target=i386-elf ;;
+  i[345]86-*-netware)	ld_target=i386-elf ;;
+  i[345]86-*-elf*)	ld_target=i386-elf ;;
+  i[345]86-*-sysv*)	ld_target=i386-coff ;;
+  i[345]86-*-mach*)	ld_target=i386-mach ;;
+  i[345]86-*-gnu*)	ld_target=i386-mach ;;
+  m8*-*-*)		ld_target=m88k-bcs ;;
+  a29k-*-udi)		ld_target=sa29200 ;;
+  a29k-*-ebmon)		ld_target=ebmon29k ;;
+  a29k-*-*)		ld_target=coff-a29k ;;
+#  arm-*-riscix*)	ld_target=riscix ;;
+  h8300-*-hms)		ld_target=coff-h8300 ;;
+  h8300h-*-hms)		ld_target=cf-h8300h ;;
+  h8500-*-hms)		ld_target=coff-h8500 ;;
+  sh-*-*)		ld_target=coff-sh ;;
+  m68k-sony-*)		ld_target=news ;;
+  m68k-hp-bsd*)		ld_target=hp300bsd ;;
+  m68*-*-aout)		ld_target=m68k ;;
+  m68*-*-coff)		ld_target=m68k-coff ;;
+  m68*-*-hpux*)		ld_target=hp300hpux ;;
+  m68*-*-lynxos*)	ld_target=m68k-lynx ;;
+  m68*-*-*)
+    echo '***' "Unknown m68k target vendor for ld:" ${target_vendor} 1>&2
+			exit 1 ;;
+  hppa*-*-*elf*)	ld_target=hppaelf ;;
+  vax-dec-ultrix* | vax-dec-bsd*) ld_target=vax ;;
+  mips*-dec-ultrix*)	ld_target=mips-lit ;;
+  mips*-sgi-irix5*)	ld_target=mipsb-elf32 ;;
+  mips*-sgi-irix*)	ld_target=mips-big ;;
+  mips*el-idt-ecoff*)	ld_target=mipsl-idt ;;
+  mips*-idt-ecoff*)	ld_target=mips-idt ;;
+  mips*-dec-bsd*)	ld_target=mipsbsd ;;
+  mips*el-*-elf*)	ld_target=mipsl-elf32 ;;
+  mips*-*-elf*)		ld_target=mipsb-elf32 ;;
+  ssbig-na-sstrix)	ld_target=ss-big ;;
+  sslittle-na-sstrix)	ld_target=ss-little ;;
+  alpha-*-osf*)		ld_target=alpha ;;
+  alpha-*-netware*)	ld_target=alpha ;;
+  z8k-*-sim | z8k-*-coff) ld_target=z8ksim ;;
+  ns32k-pc532-mach)	ld_target=pc532mach ;;
+  ns32k-pc532-netbsd*)  ld_target=netbsd532 ;;
+  powerpc-*-elf*)	ld_target=ppc-elf32 ;;
+  powerpc-*-netware*)	ld_target=ppc-elf32 ;;
+  *-*-aout)		ld_target=${target_cpu}-${target_vendor} ;;
+  *-*-coff)		ld_target=${target_cpu}-${target_vendor} ;;
+  *-*-netware)		ld_target=${target_cpu}-elf ;;
+
+  all)			ld_target=all ;;
+esac
+
+    if [ "x$ld_target" = "xall" ]; then
+        all_targets=true
+    else
+	if [ ! -f ${srcdir}/config/${ld_target}.mt ] ; then
+	    echo '***' No file ${srcdir}/config/${ld_target}.mt 1>&2
+	    echo '***' GNU LD does not support target ${ld_target} 1>&2
+	    echo '***' Look in ld/configure.in for supported targets 1>&2
+	    exit 1
+	fi
+
+	if [ "x$targ" = "x$target" ]; then
+	    target_makefile_frag=${srcdir}/config/${ld_target}.mt
+	else
+	    target_extra_frags="$target_extra_frags ${srcdir}/config/${ld_target}.mt"
+	fi
+    fi
+done
+
+# We don't do any links based on the target system, just makefile config.
+
+# post-target:
+
+rm -f Makefile.tmp Makefile.2
+mv Makefile Makefile.tmp
+
+if [ x${all_targets} = xfalse ]; then
+
+    allfrags="$target_makefile_frag $target_extra_frags"
+
+    # The emulations in all the configured targets.
+    tb=`sed -n '
+    s/EMUL[ 	]*=[ 	]*\([^ 	]*\)/e\1.o/p
+    s/EMUL_EXTRA.*=[ 	]*\([^ 	]*\)/e\1.o/p
+    ' $allfrags`
+    # uniq the list.
+    f=""
+    for i in $tb ; do
+	case " $f " in
+	*" $i "*) ;;
+	*) f="$f $i" ;;
+	esac
+    done
+    tb="$f"
+
+    echo "EMULATION_OFILES = $tb" >> Makefile.2
+
+else	# all_targets is true
+    echo 'EMULATION_OFILES = $(ALL_EMULATIONS)' >> Makefile.2
+fi	# all_targets is true
+
+cat Makefile.tmp >> Makefile.2
+rm -f Makefile.tmp
+mv Makefile.2 Makefile
+
+mkdir ldscripts 2>/dev/null

@@ -1,0 +1,65 @@
+This is Info file ld.info, produced by Makeinfo-1.55 from the input
+file ./ld.texinfo.
+
+START-INFO-DIR-ENTRY
+* Ld: (ld).                       The GNU linker.
+END-INFO-DIR-ENTRY
+
+   This file documents the GNU linker LD.
+
+   Copyright (C) 1991, 1992, 1993, 1994 Free Software Foundation, Inc.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided also
+that the entire resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+
+Indirect:
+ld.info-1: 865
+ld.info-2: 50838
+
+Tag Table:
+(Indirect)
+Node: Top865
+Node: Overview1338
+Node: Invocation2451
+Node: Options2859
+Node: Environment25102
+Node: Commands26047
+Node: Scripts27041
+Node: Expressions28139
+Node: Integers29066
+Node: Symbols29905
+Node: Location Counter30651
+Node: Operators31799
+Node: Evaluation32709
+Node: Assignment33404
+Node: Arithmetic Functions36933
+Node: MEMORY40468
+Node: SECTIONS43017
+Node: Section Definition44619
+Node: Section Placement46354
+Node: Section Data Expressions50838
+Node: Section Options54699
+Node: Entry Point58371
+Node: Option Commands59967
+Node: Machine Dependent64647
+Node: H8/30065067
+Node: i96065862
+Node: BFD67528
+Node: BFD outline68971
+Node: BFD information loss70256
+Node: Canonical format72764
+Node: MRI77110
+Node: Index81585
+
+End Tag Table

@@ -1,0 +1,1 @@
+EMUL=m88kbcs

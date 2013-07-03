@@ -1,0 +1,356 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl And be careful when changing it!  If you must add tests with square
+dnl brackets, be sure changequote invocations surround it.
+dnl
+dnl
+AC_PREREQ(1.118)dnl
+AC_INIT(as.h)dnl
+dnl
+bfd_gas=no
+user_bfd_gas=
+AC_ARG_ENABLE(bfd-assembler,
+[    bfd-assembler	use BFD back end for writing object files],
+[case "${enableval}" in
+  yes) need_bfd=yes user_bfd_gas=yes ;;
+  no)  user_bfd_gas=no ;;
+  *)   AC_MSG_ERROR(bad value ${enableval} given for bfd-assembler option) ;;
+esac])dnl
+
+# Generate a header file -- gets more post-processing by Makefile later.
+AC_CONFIG_HEADER(conf)
+
+dnl For recursion to work right, this must be an absolute pathname.
+AC_CONFIG_AUX_DIR(`cd $srcdir;pwd`/..)
+AC_CANONICAL_SYSTEM
+AC_ARG_PROGRAM
+
+emulation=generic
+
+# assign cpu type
+
+# check for architecture variants
+case ${target_cpu} in
+  hppa*)	cpu_type=hppa ;;
+changequote(,)dnl
+  i[45]86)	cpu_type=i386 ;;
+  m680[012346]0) cpu_type=m68k ;;
+  m68008)	cpu_type=m68k ;;
+  m683??)       cpu_type=m68k ;;
+changequote([,])dnl
+  m8*)		cpu_type=m88k ;;
+  mips*el)	cpu_type=mips endian=little;;
+  mips*)	cpu_type=mips endian=big ;;
+  ssbig*)       cpu_type=ss ;;
+  sslittle*)    cpu_type=ss ;;
+  powerpc*)	cpu_type=ppc ;;
+  rs6000*)	cpu_type=ppc ;;
+  sparc64)	cpu_type=sparc obj_format=elf
+		AC_DEFINE(sparcv9) ;;
+  sparclite*)   cpu_type=sparc ;;
+  *)		cpu_type=${target_cpu} ;;
+esac
+
+# do we need the opcodes library?
+case ${cpu_type} in
+  alpha | vax)
+    ;;
+  *)
+    OPCODES_LIB="../opcodes/libopcodes.a"
+    ;;
+esac
+AC_SUBST(OPCODES_LIB)
+
+gas_target=${cpu_type}
+generic_target=${cpu_type}-${target_vendor}-${target_os}
+dev=no
+
+# assign object format
+case ${generic_target} in
+  a29k-amd-udi)		obj_format=coff gas_target=ebmon29k ;;
+  a29k-amd-ebmon)	obj_format=coff gas_target=ebmon29k ;;
+
+  alpha-*-netware*)	obj_format=ecoff ;;
+  alpha-*-osf*)		obj_format=ecoff ;;
+
+  arm-*-riscix*)	obj_format=aout ;;
+
+  hppa-*-*elf*)		obj_format=elf emulation=hppa ;;
+  hppa-*-osf*)		obj_format=som emulation=hppa ;;
+  hppa-*-hpux*)		obj_format=som emulation=hppa ;;
+  hppa-*-bsd*)		obj_format=som emulation=hppa ;;
+  hppa-*-hiux*)		obj_format=som emulation=hppa ;;
+
+  h8300-*-coff)		obj_format=coff ;;
+
+  i386-ibm-aix*)	obj_format=coff gas_target=i386coff
+			 emulation=i386aix ;;
+  i386-*-bsd*)		obj_format=aout emulation=386bsd ;;
+  i386-*-netbsd0.8)	obj_format=aout emulation=386bsd ;;
+  i386-*-netbsd*)	obj_format=aout emulation=netbsd ;;
+  i386-*-linux*elf*)	obj_format=elf  emulation=linux ;;
+  i386-*-linux*coff*)	obj_format=coff emulation=linux
+			 gas_target=i386coff ;;
+  i386-*-linux*)	obj_format=aout emulation=linux ;;
+  i386-*-lynxos*)	obj_format=coff gas_target=i386coff
+			 emulation=lynx ;;
+  i386-*-sysv4* | i386-*-solaris* | i386-*-elf)
+			obj_format=elf ;;
+  i386-*-coff | i386-*-sysv* | i386-*-sco* | i386-*-isc*)
+			obj_format=coff gas_target=i386coff ;;
+  i386-*-vsta)		obj_format=aout ;;
+  i386-*-go32)		obj_format=coff gas_target=i386coff ;;
+  i386-*-mach* | i386-*-gnu*)
+			obj_format=aout emulation=mach bfd_gas=yes ;;
+
+  i960-*-bout)		obj_format=bout ;;
+  i960-*-coff)		obj_format=coff emulation=ic960 gas_target=ic960coff ;;
+  i960-*-nindy*)	obj_format=bout ;;
+  i960-*-vxworks4*)	obj_format=bout ;;
+  i960-*-vxworks5.0)	obj_format=bout ;;
+  i960-*-vxworks5.*)	obj_format=coff emulation=ic960 gas_target=ic960coff ;;
+  i960-*-vxworks*)	obj_format=bout ;;
+
+  m68k-wrs-vxworks | m68k-ericsson-ose | m68k-*-sunos*)
+			obj_format=aout emulation=sun3 ;;
+  m68k-motorola-sysv)	obj_format=coff gas_target=m68kcoff emulation=delta ;;
+  m68k-bull-sysv3*)	obj_format=coff gas_target=m68kcoff emulation=dpx2 ;;
+  m68k-apollo-*)	obj_format=coff gas_target=apollo emulation=apollo ;;
+  m68k-*-coff | m68k-*-sysv*)
+			obj_format=coff gas_target=m68kcoff ;;
+  m68k-*-hpux*)		obj_format=hp300 emulation=hp300 ;;
+  m68k-*-lynxos*)	obj_format=coff gas_target=m68kcoff
+			 emulation=lynx ;;
+
+  m88k-*-coff*)		obj_format=coff gas_target=m88kcoff ;;
+
+  # don't change emulation like *-*-bsd does
+  mips-*-bsd*)		obj_format=aout gas_target=mips-lit ;;
+  mips-*-ultrix*)	obj_format=ecoff gas_target=mips-lit ;;
+  mips-*-ecoff*)	obj_format=ecoff 
+			case "$endian" in
+			big) gas_target=mips-big ;;
+			*)   gas_target=mips-lit ;;
+			esac
+			;;
+  mips-*-ecoff*)	obj_format=ecoff gas_target=mips-big ;;
+  mips-*-irix5*)	obj_format=elf gas_target=mips-big ;;
+  mips-*-irix*)		obj_format=ecoff gas_target=mips-big ;;
+  mips-*-riscos*)	obj_format=ecoff gas_target=mips-big ;;
+  mips-*-sysv*)		obj_format=ecoff gas_target=mips-big ;;
+  mips-*-elf*)		obj_format=elf 
+			case "$endian" in
+			big) gas_target=mips-big ;;
+			*)   gas_target=mips-lit ;;
+			esac
+			;;
+  ssbig-na-sstrix)	obj_format=ecoff gas_target=ssbig ;;
+  sslittle-na-sstrix)	obj_format=ecoff gas_target=sslittle ;;
+  ppc-*-aix*)		obj_format=coff ;;
+  ppc-*-elf*)		obj_format=elf ;;
+  ppc-*-netware*)	obj_format=elf emulation=ppcnw ;;
+  ppc-*-sysv4*)		obj_format=elf ;;
+
+  sh-*-coff)		obj_format=coff ;;
+
+  ns32k-pc532-mach*)	obj_format=aout emulation=pc532 ;;
+  ns32k-pc532-netbsd*)	obj_format=aout emulation=nbsd532 ;;
+
+  sparc*-*-sunos4*)	obj_format=aout emulation=sun3 ;;
+  sparc*-*-aout | sparc*-*-vxworks)
+			obj_format=aout ;;
+  sparc*-*-coff)	obj_format=coff ;;
+  sparc*-*-lynxos*)	obj_format=coff emulation=lynx ;;
+  sparc*-fujitsu-none)	obj_format=aout ;;
+  sparc*-*-elf | sparc*-*-solaris*)
+			obj_format=elf ;;
+
+  vax-*-bsd* | vax-*-ultrix*)
+			obj_format=aout ;;
+  vax-*-vms)		obj_format=vms ;;
+
+  z8k-*-coff | z8k-*-sim)
+			obj_format=coff ;;
+
+  *-*-aout | *-*-scout)
+			obj_format=aout ;;
+  *-*-nindy*)
+			obj_format=bout ;;
+  *-*-bsd*)
+			obj_format=aout emulation=sun3 ;;
+  *-*-generic)		obj_format=generic ;;
+  *-*-xray | *-*-hms)	obj_format=coff ;;
+  *-*-sim)		obj_format=coff ;;
+  *-*-elf | *-*-sysv4* | *-*-solaris*)
+			AC_MSG_WARN(GAS support for ELF format is incomplete)
+			obj_format=elf dev=yes ;;
+  *-*-vxworks)		obj_format=aout ;;
+  *-*-netware)		obj_format=elf ;;
+esac
+
+# Assign floating point type.  Most processors with FP support
+# IEEE FP.  On those that don't support FP at all, usually IEEE
+# is emulated.
+case ${target_cpu} in
+  vax | tahoe )	atof=${target_cpu} ;;
+  *)			atof=ieee ;;
+esac
+
+case "${obj_format}" in
+  "") AC_MSG_ERROR(GAS does not know what format to use for target ${target}) ;;
+esac
+
+dnl
+dnl Make sure the desired support files exist.
+dnl
+
+if test ! -r ${srcdir}/config/tc-${cpu_type}.c; then
+  AC_MSG_ERROR(GAS does not support target CPU ${cpu_type})
+fi
+
+if test ! -r ${srcdir}/config/obj-${obj_format}.c; then
+  AC_MSG_ERROR(GAS does not have support for object file format ${obj_format})
+fi
+
+# and target makefile frag
+
+target_frag=${srcdir}/config/${gas_target}.mt
+if test ! -r ${target_frag}; then
+  target_frag=/dev/null # ick! but subst_file can't be conditionalized
+fi
+AC_SUBST_FILE(target_frag)
+
+case ${cpu_type}-${obj_format} in
+  arm-*)	bfd_gas=yes ;;
+# not yet
+# i386-aout)	bfd_gas=preferred ;;
+  mips-*)	bfd_gas=yes ;;
+  ns32k-*)	bfd_gas=yes ;;
+  ppc-*)	bfd_gas=yes ;;
+  sparc*-*)	bfd_gas=yes ;;
+  *-elf)	bfd_gas=yes ;;
+  *-ecoff)	bfd_gas=yes ;;
+  *-som)	bfd_gas=yes ;;
+  *)		;;
+esac
+
+case ${user_bfd_gas}-${bfd_gas} in
+  yes-yes | no-no)
+    # We didn't override user's choice.
+    ;;
+  no-yes)
+    AC_MSG_WARN(Use of BFD is required for ${target}; overriding config options.)
+    ;;
+  no-preferred)
+    bfd_gas=no
+    ;;
+  *-preferred)
+    bfd_gas=yes
+    ;;
+  yes-*)
+    bfd_gas=yes
+    ;;
+  -*)
+    # User specified nothing.
+    ;;
+esac
+
+case ${bfd_gas}-${cpu_type}-${obj_format} in
+  yes-*-coff)	need_bfd=yes ;;
+  no-*-coff)	need_bfd=yes
+		AC_DEFINE(MANY_SEGMENTS) ;;
+esac
+
+reject_dev_configs=yes
+
+case ${reject_dev_configs}-${dev} in
+  yes-yes) # Oops.
+    AC_MSG_ERROR(GAS does not support the ${generic_target} configuration.)
+    ;;
+esac
+
+AC_LINK_FILES(config/tc-${cpu_type}.c	config/tc-${cpu_type}.h \
+	config/obj-${obj_format}.h config/obj-${obj_format}.c \
+	config/te-${emulation}.h config/atof-${atof}.c,
+	targ-cpu.c targ-cpu.h obj-format.h obj-format.c targ-env.h atof-targ.c)
+
+case "${bfd_gas}" in
+  yes)	AC_DEFINE(BFD_ASSEMBLER)
+	need_bfd=yes ;;
+esac
+
+case "${need_bfd}" in
+  yes)	BFDLIB=../bfd/libbfd.a
+	ALL_OBJ_DEPS="$ALL_OBJ_DEPS ../bfd/bfd.h"
+	;;
+esac
+AC_SUBST(BFDLIB)
+AC_SUBST(ALL_OBJ_DEPS)
+
+AC_DEFINE_UNQUOTED(TARGET_ALIAS,	"${target_alias}")
+AC_DEFINE_UNQUOTED(TARGET_CANONICAL,	"${target}")
+AC_DEFINE_UNQUOTED(TARGET_CPU,		"${target_cpu}")
+AC_DEFINE_UNQUOTED(TARGET_VENDOR,	"${target_vendor}")
+AC_DEFINE_UNQUOTED(TARGET_OS,		"${target_os}")
+
+AC_PROG_CC
+AC_PROG_INSTALL
+
+AC_CHECK_HEADERS(string.h stdlib.h memory.h strings.h unistd.h stdarg.h varargs.h errno.h sys/types.h)
+
+# Put this here so that autoconf's "cross-compiling" message doesn't confuse
+# people who are not cross-compiling but are compiling cross-assemblers.
+AC_MSG_CHECKING(whether compiling a cross-assembler)
+if test "${host}" = "${target}"; then
+  cross_gas=no
+else
+  cross_gas=yes
+  AC_DEFINE(CROSS_COMPILE)
+fi
+AC_MSG_RESULT($cross_gas)
+
+dnl ansidecl.h will deal with const
+dnl AC_CONST
+AC_FUNC_ALLOCA
+AC_C_INLINE
+
+# VMS doesn't have unlink.
+AC_CHECK_FUNCS(unlink remove, break)
+
+# Some non-ANSI preprocessors botch requoting inside strings.  That's bad
+# enough, but on some of those systems, the assert macro relies on requoting
+# working properly!
+GAS_WORKING_ASSERT
+
+# On some systems, the system header files may not declare malloc, realloc,
+# and free.  There are places where gas needs these functions to have been
+# declared -- such as when taking their addresses.
+gas_test_headers="
+#ifdef HAVE_MEMORY_H
+#include <memory.h>
+#endif
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+"
+GAS_CHECK_DECL_NEEDED(malloc, f, char *(*f)(), $gas_test_headers)
+GAS_CHECK_DECL_NEEDED(free, f, int f, $gas_test_headers)
+
+# Does errno.h declare errno, or do we have to add a separate declaration
+# for it?
+GAS_CHECK_DECL_NEEDED(errno, f, int f, [
+#ifdef HAVE_ERRNO_H
+#include <errno.h>
+#endif
+])
+
+AC_CONFIG_SUBDIRS(testsuite)
+
+dnl This must come last.
+AC_OUTPUT(Makefile doc/Makefile .gdbinit:gdbinit.in)
